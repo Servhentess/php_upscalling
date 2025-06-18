@@ -1,4 +1,3 @@
-FROM php:8-apache
+FROM php:8.3-apache-bullseye
 RUN echo "🟣 Dockerfile is running..."
 COPY src/ /var/www/html/
-RUN ls -la /var/www/html/
