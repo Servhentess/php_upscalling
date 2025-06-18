@@ -1,0 +1,7 @@
+terraform/terraform.tfstate
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate.backup
+terraform/.terraform/providers/registry.terraform.io/kreuzwerker/docker/2.25.0/linux_amd64/CHANGELOG.md
+terraform/.terraform/providers/registry.terraform.io/kreuzwerker/docker/2.25.0/linux_amd64/LICENSE
+terraform/.terraform/providers/registry.terraform.io/kreuzwerker/docker/2.25.0/linux_amd64/README.md
+terraform/.terraform/providers/registry.terraform.io/kreuzwerker/docker/2.25.0/linux_amd64/terraform-provider-docker_v2.25.0
