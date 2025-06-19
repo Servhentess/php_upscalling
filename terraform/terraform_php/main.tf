@@ -20,21 +20,24 @@ resource "docker_image" "php_app" {
   }
 }
 
-# 🚀 Conteneur PHP exposé en port 8080 avec accès aux fichiers Terraform + Docker socket
 resource "docker_container" "php_app" {
   name  = "php_form"
   image = docker_image.php_app.name
 
   ports {
     internal = 80
-    external = 8080
+    external = 8181
   }
 
-  # ✅ Montages compatibles via host_config.volumes
-  host_config {
-    volumes = [
-      "${abspath("${path.module}/..")}:/var/www/terraform",       # terraform/ monté dans le conteneur
-      "/var/run/docker.sock:/var/run/docker.sock"                # socket Docker partagé
-    ]
+  # Remplacez host_config par des blocs volumes
+  volumes {
+    host_path      = abspath("${path.module}/..")
+    container_path = "/var/www/terraform"
+  }
+
+  volumes {
+    host_path      = "/var/run/docker.sock"
+    container_path = "/var/run/docker.sock"
   }
 }
+
