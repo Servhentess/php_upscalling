@@ -29,15 +29,12 @@ resource "docker_container" "php_app" {
     external = 8181
   }
 
-  # Remplacez host_config par des blocs volumes
-  volumes {
-    host_path      = abspath("${path.module}/..")
-    container_path = "/var/www/terraform"
-  }
-
-  volumes {
-    host_path      = "/var/run/docker.sock"
-    container_path = "/var/run/docker.sock"
+  # Utilise host_config pour monter les volumes necessaires
+  host_config {
+    binds = [
+      "${abspath("${path.module}/..")}:\/var\/www\/terraform",
+      "/var/run/docker.sock:/var/run/docker.sock"
+    ]
   }
 }
 
