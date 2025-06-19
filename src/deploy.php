@@ -1,23 +1,35 @@
 <?php
-// 🛡️ Vérifie que le champ a bien été soumis
 if (!isset($_POST['os'])) {
-    echo "Erreur : aucun système d'exploitation sélectionné.";
+    echo "Erreur : OS non défini.";
     exit;
 }
 
-// 🧼 Protège la valeur reçue (évite injections)
-$os = escapeshellarg($_POST['os']);
+$os_raw = $_POST['os'];
+$os_safe = preg_replace('/[^a-z0-9_-]/i', '', $os_raw); // sécurité
 
-// 📂 Génére un fichier os.auto.tfvars dans le dossier Terraform
-$tfvars_path = __DIR__ . "/terraform/os.auto.tfvars";
-file_put_contents($tfvars_path, "os = $os\n");
+// 📁 Répertoire d'origine (monté depuis l'hôte)
+$origin = "/var/www/terraform/terraform_vm";
 
-// 🛠️ Prépare la commande Terraform à exécuter
-$cmd = "cd terraform && terraform init -input=false && terraform apply -auto-approve";
+// 📁 Répertoire d'exécution temporaire dans le container (pas de restriction chmod)
+$tmpdir = "/tmp/terraform_vm_exec_" . uniqid();
 
-// 🧙‍♂️ Exécute la commande et capture la sortie
+// 🔁 Supprime l'ancien dossier s'il existait, puis copie le projet
+if (is_dir($tmpdir)) {
+    shell_exec("rm -rf $tmpdir");
+}
+shell_exec("cp -r $origin $tmpdir");
+
+// 📝 Génère le fichier .tfvars dans le dossier temporaire
+file_put_contents("$tmpdir/os.auto.tfvars", "os = \"$os_safe\"\n");
+
+// 🔧 Indique à Terraform d’utiliser un cache local dans /tmp
+putenv("TF_DATA_DIR=/tmp/terraform_cache_" . uniqid());
+
+// 🧙‍♂️ Exécute Terraform
+$cmd = "cd $tmpdir && terraform init -input=false && terraform apply -auto-approve 2>&1";
 $output = shell_exec($cmd);
 
-// 📜 Affiche le résultat de l’exécution
+// 🖨️ Affiche le résultat à l'écran
+echo "<h2>Résultat du déploiement pour $os :</h2>";
 echo "<pre>$output</pre>";
 ?>
