@@ -10,9 +10,9 @@ This project provides a simple PHP application with Docker and Terraform configu
    ```
 2. Run the container:
    ```bash
-   docker run -p 8080:80 php_app
+   docker run -p 8181:80 php_app
    ```
-   The app will be available at [http://localhost:8080](http://localhost:8080).
+   The app will be available at [http://localhost:8181](http://localhost:8181).
 
 ## Terraform Setup
 
@@ -26,4 +26,4 @@ Terraform configuration in `terraform/` directory provisions a container using t
    ```bash
    terraform apply
    ```
-   This starts a container exposing the app on port 8080.
+   This starts a container exposing the app on port 8181.
