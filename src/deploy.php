@@ -30,6 +30,6 @@ $cmd = "cd $tmpdir && terraform init -input=false && terraform apply -auto-appro
 $output = shell_exec($cmd);
 
 // 🖨️ Affiche le résultat à l'écran
-echo "<h2>Résultat du déploiement pour $os :</h2>";
+echo "<h2>Résultat du déploiement pour $os_safe :</h2>";
 echo "<pre>$output</pre>";
 ?>
