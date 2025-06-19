@@ -32,7 +32,3 @@ resource "docker_container" "vm" {
   command = ["tail", "-f", "/dev/null"]
 }
 
-volumes {
-  host_path      = "/var/run/docker.sock"
-  container_path = "/var/run/docker.sock"
-}
