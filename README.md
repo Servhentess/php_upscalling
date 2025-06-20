@@ -8,11 +8,16 @@ This project provides a simple PHP application with Docker and Terraform configu
    ```bash
    docker build -t php_app .
    ```
-2. Run the container:
+2. Run the container (mount the Docker socket so Terraform can manage Docker):
    ```bash
-   docker run -p 8181:80 php_app
+   docker run -p 8181:80 \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     php_app
    ```
    The app will be available at [http://localhost:8181](http://localhost:8181).
+
+The container adds `www-data` to the `docker` group (GID `999` by default).
+If your host uses a different group ID for Docker, update the Dockerfile accordingly.
 
 ## Terraform Setup
 
