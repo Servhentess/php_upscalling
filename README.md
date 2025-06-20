@@ -12,12 +12,19 @@ This project provides a simple PHP application with Docker and Terraform configu
    ```bash
    docker run -p 8181:80 \
      -v /var/run/docker.sock:/var/run/docker.sock \
+     -v "$(pwd)/terraform:/var/www/terraform" \
      php_app
    ```
    The app will be available at [http://localhost:8181](http://localhost:8181).
 
-The container adds `www-data` to the `docker` group (GID `999` by default).
-If your host uses a different group ID for Docker, update the Dockerfile accordingly.
+The container adds `www-data` to the `docker` group. The Dockerfile assumes the
+group has the ID `999`. If your host (for example under WSL) uses a different
+GID, update the `groupadd` command before building. You can obtain the correct
+ID with:
+
+```bash
+stat -c '%g' /var/run/docker.sock
+```
 
 ## Terraform Setup
 
