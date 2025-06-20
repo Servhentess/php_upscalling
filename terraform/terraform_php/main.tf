@@ -29,12 +29,17 @@ resource "docker_container" "php_app" {
     external = 8181
   }
 
-  # Utilise host_config pour monter les volumes necessaires
-  host_config {
-    binds = [
-      "${abspath("${path.module}/..")}:\/var\/www\/terraform",
-      "/var/run/docker.sock:/var/run/docker.sock"
-    ]
+  # Utilise des mounts pour partager les volumes necessaires
+  mounts {
+    target = "/var/www/terraform"
+    source = abspath("${path.module}/..")
+    type   = "bind"
+  }
+
+  mounts {
+    target = "/var/run/docker.sock"
+    source = "/var/run/docker.sock"
+    type   = "bind"
   }
 }
 

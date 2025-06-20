@@ -8,5 +8,8 @@ RUN apt-get update && \
     mv terraform /usr/local/bin/ && \
     chmod +x /usr/local/bin/terraform && \
     rm terraform_1.8.2_linux_amd64.zip
+
+# Ajoute l'utilisateur www-data au groupe docker (GID a adapter selon l'hote)
+RUN groupadd -g 999 docker && usermod -aG docker www-data
     
 COPY src/ /var/www/html/
